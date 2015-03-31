@@ -1,0 +1,41 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="headline_1">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:text">"Headline"</item>
+    </style>
+
+    <style name="standart">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ff232323</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:text">"Standart"</item>
+    </style>
+
+    <style name="bigger" parent="standart">
+        <item name="android:textColor">#ff0f0f0f</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:text">"Bigger"</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
+</resources>
