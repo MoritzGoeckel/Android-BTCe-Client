@@ -30,7 +30,18 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         GlobalData.API = new AsyncBtcApi("121B9FF2-KZEAGDM9-DPO0PBAN-UVISX7YV-QJWRSAV1", "5a1446dca2af336dbffcf00e2ff290386960421fee7a152c71c16aaf290847f4", this);
+        requestData();
+    }
+
+    private void requestData() {
         GlobalData.API.requestAccountData();
+        GlobalData.API.requestHistoryData();
+        GlobalData.API.requestOpenOrdersData();
+        GlobalData.API.requestPairData("btc_usd");
+        GlobalData.API.requestPairData("ltc_usd");
+        GlobalData.API.requestPairData("nmc_usd");
+        GlobalData.API.requestPairData("ppc_usd");
+        GlobalData.API.requestPairData("ppc_usd"); //Todo: Liste nicht vollständig
     }
 
     @Override
@@ -66,7 +77,7 @@ public class MainActivity extends ActionBarActivity
 
         if (id == R.id.action_refresh) {
 
-            //Todo: Do the refresh
+            requestData();
 
             return true;
         }

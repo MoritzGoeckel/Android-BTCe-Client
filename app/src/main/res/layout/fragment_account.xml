@@ -9,6 +9,7 @@
 
         <TextView
             style="@style/headline_1"
+            android:text="Account"
             android:id="@+id/account_headline"/>
 
         <TableLayout
@@ -20,7 +21,21 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    style="@style/bigger"/>
+                    style="@style/bigger"
+                    android:text="Volume"/>
+
+                <TextView
+                    style="@style/standart"
+                    android:id="@+id/account_volume"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/bigger"
+                    android:text="Value"/>
 
                 <TextView
                     style="@style/standart"
@@ -32,11 +47,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    style="@style/bigger"/>
+                    style="@style/bigger"
+                    android:text="Funds"/>
 
                 <TextView
                     style="@style/standart"
-                    android:id="@+id/account_usd"/>
+                    android:id="@+id/account_funds"/>
             </TableRow>
         </TableLayout>
 
