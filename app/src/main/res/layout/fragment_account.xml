@@ -22,7 +22,7 @@
 
                 <TextView
                     style="@style/bigger"
-                    android:text="Volume"/>
+                    android:text="Volumen"/>
 
                 <TextView
                     style="@style/standart"

@@ -73,7 +73,7 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
     private String getFundsString(BTCE.Info info) {
         String nl = "\n";
         String all = "";
-        all += "USD: " + String.valueOf(info.info.funds.usd) + nl;
+        all += "USD: " + String.valueOf(info.info.funds.usd) + nl; //Todo: Get stuff on order
         all += "EUR: " + String.valueOf(info.info.funds.eur) + nl; //TODO: Get Value in USD
         all += "BTC: " + String.valueOf(info.info.funds.btc) + nl;
         all += "LTC: " + String.valueOf(info.info.funds.ltc) + nl;

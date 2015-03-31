@@ -4,4 +4,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <TextView
+        style="@style/bigger"
+        android:text="New Text"
+        android:id="@+id/historic_order_item_headline"/>
+
+    <TextView
+        style="@style/standart"
+        android:text="New Text"
+        android:id="@+id/historic_order_item_subtitle"/>
+
 </LinearLayout>

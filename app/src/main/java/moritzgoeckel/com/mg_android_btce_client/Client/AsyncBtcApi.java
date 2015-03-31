@@ -73,8 +73,6 @@ public class AsyncBtcApi {
 
             for(int i = 0; i < orders.info.orders.length; i++)
             {
-                Log.e("pair ", orders.info.orders[i].order_details.pair);
-
                 if(getTicker(orders.info.orders[i].order_details.pair) != null)
                     value += (orders.info.orders[i].order_details.amount * getTicker(orders.info.orders[i].order_details.pair).last);
             }
@@ -85,8 +83,6 @@ public class AsyncBtcApi {
     }
 
     private double getValueIfNotNull(double amount, BTCE.Ticker ticker){
-        Log.println(10, "********","Amount: " + amount + " Ticker: " + (ticker != null));
-
         if(amount >= 0.01d && ticker != null)
             return amount * ticker.last;
         else
@@ -190,6 +186,7 @@ public class AsyncBtcApi {
                 int tries = 0;
                 while (tries < MAXREQUESTTRIES && success == false) {
                     try {
+                        Log.i("API DOWNLOAD", "Account Data");
                         BTCE.Info tmp = api.getInfo();
                         if (tmp.success == 1) {
                             accountInfo = tmp;
@@ -197,7 +194,7 @@ public class AsyncBtcApi {
                             success = true;
                         }
                     } catch (Exception e) {
-                        Log.d("*****", e.getMessage());
+                        Log.e("API DONWLOAD ERROR","requestAccountData: " + e.getMessage());
                     }
                     tries++;
                 }
@@ -218,6 +215,7 @@ public class AsyncBtcApi {
                 while (tries < MAXREQUESTTRIES && success == false)
                 {
                     try {
+                        Log.i("API DOWNLOAD", "Open Orders");
                         BTCE.OrderList tmp = api.getActiveOrders();
                         if (tmp.success == 1) {
                             openOrders = tmp;
@@ -225,7 +223,8 @@ public class AsyncBtcApi {
                             success = true;
                         }
                     } catch (Exception e) {
-                        Log.d("*****", e.getMessage());
+                        Log.e("API DONWLOAD ERROR", "requestOpenOrdersData: " + e.getMessage());
+
                     }
                     tries++;
                 }
@@ -244,7 +243,7 @@ public class AsyncBtcApi {
                 int tries = 0;
                 while (tries < MAXREQUESTTRIES && success == false) {
                     try {
-
+                        Log.i("API DOWNLOAD", "History Data");
                         BTCE.TradeHistory tmp = api.getTradeHistory();
                         if (tmp.success == 1) {
                             tradeHistory = tmp;
@@ -253,7 +252,8 @@ public class AsyncBtcApi {
                         }
 
                     } catch (Exception e) {
-                        Log.d("*****", e.getMessage());
+                        Log.e("API DONWLOAD ERROR", "requestHistoryData: " + e.getMessage());
+
                     }
                     tries++;
                 }
@@ -272,6 +272,7 @@ public class AsyncBtcApi {
                 int tries = 0;
                 while (tries < MAXREQUESTTRIES && success == false) {
                     try {
+                        Log.i("API DOWNLOAD", "Pair Data");
 
                         BTCE.Ticker ticker = api.getTicker(pair);
 
@@ -284,7 +285,7 @@ public class AsyncBtcApi {
                         success = true;
 
                     } catch (Exception e) {
-                        Log.d("*****", e.getMessage());
+                        Log.e("API DONWLOAD ERROR", "requestPairData: " + e.getMessage());
                     }
                     tries++;
                 }
