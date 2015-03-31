@@ -2,13 +2,17 @@ package moritzgoeckel.com.mg_android_btce_client.Data;
 import java.util.ArrayList;
 import java.util.List;
 import android.content.Context;
+import android.support.v4.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import javax.xml.datatype.Duration;
+
 import moritzgoeckel.com.mg_android_btce_client.Client.BTCE;
+import moritzgoeckel.com.mg_android_btce_client.Client.GlobalData;
 import moritzgoeckel.com.mg_android_btce_client.R;
 
 public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
@@ -43,7 +47,18 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
         }
 
         BTCE.TradeHistoryOrder item = getItem(position);
-        ((TextView)view.findViewById(R.id.historic_order_item_headline)).setText(item.trade_details.pair + " " + item.trade_details.type);
+
+        String duration = "";
+
+        BTCE.Info info = GlobalData.API.getAccountInfo();
+        if(info != null)
+        {
+            long delta = info.info.server_time - item.trade_details.timestamp;
+            delta = delta / 1000;
+            duration = String.format("%d:%02d:%02d", delta/3600, (delta%3600)/60, (delta%60)) + " ago"; //Todo: Validate...
+        }
+
+        ((TextView)view.findViewById(R.id.historic_order_item_headline)).setText(item.trade_details.pair + " " + item.trade_details.type + " " + duration);
         ((TextView)view.findViewById(R.id.historic_order_item_subtitle)).setText(item.trade_details.amount +  " for " + item.trade_details.rate);
 
         return view;

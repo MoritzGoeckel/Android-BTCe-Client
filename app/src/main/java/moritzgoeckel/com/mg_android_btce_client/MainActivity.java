@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
 
 import moritzgoeckel.com.mg_android_btce_client.Client.AsyncBtcApi;
 import moritzgoeckel.com.mg_android_btce_client.Client.GlobalData;
@@ -33,15 +34,26 @@ public class MainActivity extends ActionBarActivity
         requestData();
     }
 
+    long lastUpdateTimeStamp = 0;
     private void requestData() {
-        GlobalData.API.requestAccountData();
-        GlobalData.API.requestHistoryData();
-        GlobalData.API.requestOpenOrdersData();
-        GlobalData.API.requestPairData("btc_usd");
-        GlobalData.API.requestPairData("ltc_usd");
-        GlobalData.API.requestPairData("nmc_usd");
-        GlobalData.API.requestPairData("ppc_usd");
-        GlobalData.API.requestPairData("ppc_usd"); //Todo: Liste nicht vollständig
+        if(lastUpdateTimeStamp < System.currentTimeMillis() - 30 * 1000) {
+            lastUpdateTimeStamp = System.currentTimeMillis();
+
+            Toast.makeText(getBaseContext(), "Updating ...", Toast.LENGTH_SHORT).show();
+
+            GlobalData.API.requestAccountData();
+            GlobalData.API.requestHistoryData();
+            GlobalData.API.requestOpenOrdersData();
+            GlobalData.API.requestPairData("btc_usd");
+            GlobalData.API.requestPairData("ltc_usd");
+            GlobalData.API.requestPairData("nmc_usd");
+            GlobalData.API.requestPairData("ppc_usd");
+            GlobalData.API.requestPairData("ppc_usd"); //Todo: Liste nicht vollständig
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), "Wait 30s", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
