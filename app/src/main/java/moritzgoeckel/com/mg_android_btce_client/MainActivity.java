@@ -47,8 +47,10 @@ public class MainActivity extends ActionBarActivity
             GlobalData.API.requestPairData("btc_usd");
             GlobalData.API.requestPairData("ltc_usd");
             GlobalData.API.requestPairData("nmc_usd");
+            GlobalData.API.requestPairData("nvc_usd");
+            GlobalData.API.requestPairData("eur_usd"); //Todo: Liste nicht vollständig
+            GlobalData.API.requestPairData("rur_usd");
             GlobalData.API.requestPairData("ppc_usd");
-            GlobalData.API.requestPairData("ppc_usd"); //Todo: Liste nicht vollständig
         }
         else
         {

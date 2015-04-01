@@ -4,14 +4,45 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        style="@style/bigger"
-        android:text="New Text"
-        android:id="@+id/order_item_headline"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        style="@style/standart"
-        android:text="New Text"
-        android:id="@+id/order_item_subtitle"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/bigger"
+                android:text="SELL"
+                android:id="@+id/order_item_buy_sell"
+                android:layout_width="150sp"/>
+
+            <TextView
+                style="@style/bigger"
+                android:text="BTC_USD"
+                android:id="@+id/order_item_pair"
+                android:layout_width="wrap_content"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/standart"
+                android:text="217.7 for 0.4"
+                android:layout_width="wrap_content"
+                android:id="@+id/order_item_conditions"/>
+
+            <TextView
+                style="@style/standart"
+                android:layout_width="wrap_content"
+                android:text=""
+                android:id="@+id/order_item_status"/>
+
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

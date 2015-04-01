@@ -1,15 +1,13 @@
 package moritzgoeckel.com.mg_android_btce_client.Data;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import android.content.Context;
-import android.support.v4.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import javax.xml.datatype.Duration;
 
 import moritzgoeckel.com.mg_android_btce_client.Client.BTCE;
 import moritzgoeckel.com.mg_android_btce_client.Client.GlobalData;
@@ -54,13 +52,33 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
         if(info != null)
         {
             long delta = info.info.server_time - item.trade_details.timestamp;
-            delta = delta / 1000;
-            duration = String.format("%d:%02d:%02d", delta/3600, (delta%3600)/60, (delta%60)) + " ago"; //Todo: Validate...
+            duration = formatDuration(delta * 1000) + " AGO";
         }
 
-        ((TextView)view.findViewById(R.id.historic_order_item_headline)).setText(item.trade_details.pair + " " + item.trade_details.type + " " + duration);
-        ((TextView)view.findViewById(R.id.historic_order_item_subtitle)).setText(item.trade_details.amount +  " for " + item.trade_details.rate);
+        ((TextView)view.findViewById(R.id.historic_order_item_buy_sell)).setText(item.trade_details.type);
+        ((TextView)view.findViewById(R.id.historic_order_item_conditions)).setText(item.trade_details.amount + " for " + item.trade_details.rate);
+        ((TextView)view.findViewById(R.id.historic_order_item_pair)).setText(item.trade_details.pair);
+        ((TextView)view.findViewById(R.id.historic_order_item_time)).setText(duration);
 
         return view;
+    }
+
+    public static String formatDuration(long millis)
+    {
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+
+        long weeks = days / 7;
+        days = days%7;
+
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        return(weeks + "W " + days +"D "+ hours + "H");
     }
 }

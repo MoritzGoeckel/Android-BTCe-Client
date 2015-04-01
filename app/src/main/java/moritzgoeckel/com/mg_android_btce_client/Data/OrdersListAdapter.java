@@ -44,8 +44,18 @@ public class OrdersListAdapter extends ArrayAdapter<BTCE.OrderListOrder> {
         }
 
         BTCE.OrderListOrder item = getItem(position);
-        ((TextView)view.findViewById(R.id.order_item_headline)).setText(item.order_details.pair + " " + item.order_details.type);
-        ((TextView)view.findViewById(R.id.order_item_subtitle)).setText(item.order_details.amount +  " for " + item.order_details.rate);
+
+        TextView sellBuyView = ((TextView)view.findViewById(R.id.order_item_buy_sell));
+        sellBuyView.setText(item.order_details.type);
+
+        if(item.order_details.type.equals("buy"))
+            sellBuyView.setTextColor(getContext().getResources().getColor(R.color.buyColor));
+        else
+            sellBuyView.setTextColor(getContext().getResources().getColor(R.color.sellColor));
+
+        ((TextView)view.findViewById(R.id.order_item_conditions)).setText(item.order_details.amount +  " for " + item.order_details.rate);
+        ((TextView)view.findViewById(R.id.order_item_pair)).setText(item.order_details.pair);
+        ((TextView)view.findViewById(R.id.order_item_status)).setText(item.order_details.status);
 
         return view;
     }

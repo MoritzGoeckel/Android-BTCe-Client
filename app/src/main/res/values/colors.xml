@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="buyColor">#ffff2321</color>
+    <color name="sellColor">#ff64ff3d</color>
+</resources>

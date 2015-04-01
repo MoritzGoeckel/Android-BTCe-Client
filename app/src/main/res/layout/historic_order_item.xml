@@ -1,17 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <TextView
-        style="@style/bigger"
-        android:text="New Text"
-        android:id="@+id/historic_order_item_headline"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        style="@style/standart"
-        android:text="New Text"
-        android:id="@+id/historic_order_item_subtitle"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/bigger"
+                android:text="SELL"
+                android:id="@+id/historic_order_item_buy_sell"
+                android:layout_width="150sp"/>
+
+            <TextView
+                style="@style/bigger"
+                android:text="BTC_USD"
+                android:id="@+id/historic_order_item_pair"
+                android:layout_width="wrap_content"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/standart"
+                android:text="217.7 for 0.4"
+                android:layout_width="wrap_content"
+                android:id="@+id/historic_order_item_conditions"/>
+
+            <TextView
+                style="@style/small"
+                android:layout_width="wrap_content"
+                android:text="0W 2D 11H AGO"
+                android:id="@+id/historic_order_item_time"/>
+
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

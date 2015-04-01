@@ -63,27 +63,33 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
 
         double volumen = GlobalData.API.getTotalVolume();
         if(volumen != -1d)
-            tx_volume.setText(String.valueOf(volumen) + "USD");
+            tx_volume.setText(formatD(volumen) + " USD");
 
         double value = GlobalData.API.getTotalValue();
         if(value != -1d)
-            tx_value.setText(String.valueOf(value) + "USD");
+            tx_value.setText(formatD(value) + " USD");
     }
 
     private String getFundsString(BTCE.Info info) {
         String nl = "\n";
         String all = "";
-        all += "USD: " + String.valueOf(info.info.funds.usd) + nl; //Todo: Get stuff on order
-        all += "EUR: " + String.valueOf(info.info.funds.eur) + nl; //TODO: Get Value in USD
-        all += "BTC: " + String.valueOf(info.info.funds.btc) + nl;
-        all += "LTC: " + String.valueOf(info.info.funds.ltc) + nl;
-        all += "NMC: " + String.valueOf(info.info.funds.nmc) + nl;
-        all += "PPC: " + String.valueOf(info.info.funds.ppc) + nl;
-        all += "NVC: " + String.valueOf(info.info.funds.nvc) + nl;
-        all += "CNC: " + String.valueOf(info.info.funds.cnc) + nl;
-        all += "FTC: " + String.valueOf(info.info.funds.ftc) + nl;
-        all += "RUR: " + String.valueOf(info.info.funds.rur) + nl;
-        all += "TRC: " + String.valueOf(info.info.funds.trc) + nl;
+        String seperator1 = " + ";
+        all += "USD: " + formatD(info.info.funds.usd) + nl; //Todo: Get on order
+        all += "EUR: " + formatD(info.info.funds.eur) +seperator1+ formatD(GlobalData.API.getOnOrder("eur")) + nl; //TODO: Get Value in USD
+        all += "BTC: " + formatD(info.info.funds.btc) +seperator1+ formatD(GlobalData.API.getOnOrder("btc")) + nl;
+        all += "LTC: " + formatD(info.info.funds.ltc) +seperator1+ formatD(GlobalData.API.getOnOrder("ltc")) + nl;
+        all += "NMC: " + formatD(info.info.funds.nmc) +seperator1+ formatD(GlobalData.API.getOnOrder("nmc")) + nl;
+        all += "PPC: " + formatD(info.info.funds.ppc) +seperator1+ formatD(GlobalData.API.getOnOrder("ppc")) + nl;
+        all += "NVC: " + formatD(info.info.funds.nvc) +seperator1+ formatD(GlobalData.API.getOnOrder("nvc")) + nl;
+        all += "CNC: " + formatD(info.info.funds.cnc) +seperator1+ formatD(GlobalData.API.getOnOrder("cnc")) + nl;
+        all += "FTC: " + formatD(info.info.funds.ftc) +seperator1+ formatD(GlobalData.API.getOnOrder("ftc")) + nl;
+        all += "RUR: " + formatD(info.info.funds.rur) +seperator1+ formatD(GlobalData.API.getOnOrder("rur")) + nl;
+        all += "TRC: " + formatD(info.info.funds.trc) +seperator1+ formatD(GlobalData.API.getOnOrder("trc")) + nl;
         return all;
+    }
+
+    private String formatD(double d)
+    {
+        return String.valueOf((double)Math.round(d * 100) / 100);
     }
 }

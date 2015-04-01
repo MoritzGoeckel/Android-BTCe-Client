@@ -61,7 +61,7 @@ public class AsyncBtcApi {
 
         if(info != null && orders != null)
         {
-            double value = 0d;
+            double value = info.info.funds.usd;
 
             value += getValueIfNotNull(info.info.funds.btc, getTicker("btc_usd"));
             value += getValueIfNotNull(info.info.funds.ltc, getTicker("ltc_usd"));
@@ -71,10 +71,19 @@ public class AsyncBtcApi {
             value += getValueIfNotNull(info.info.funds.rur, getTicker("rur_usd"));
             value += getValueIfNotNull(info.info.funds.ppc, getTicker("ppc_usd")); //Todo: Liste nicht vollständig
 
+            value += getValueIfNotNull(getOnOrder("btc"), getTicker("btc_usd"));
+            value += getValueIfNotNull(getOnOrder("ltc"), getTicker("ltc_usd"));
+            value += getValueIfNotNull(getOnOrder("nmc"), getTicker("nmc_usd"));
+            value += getValueIfNotNull(getOnOrder("nvc"), getTicker("nvc_usd"));
+            value += getValueIfNotNull(getOnOrder("eur"), getTicker("eur_usd"));
+            value += getValueIfNotNull(getOnOrder("rur"), getTicker("rur_usd"));
+            value += getValueIfNotNull(getOnOrder("ppc"), getTicker("ppc_usd"));
+
             for(int i = 0; i < orders.info.orders.length; i++)
             {
-                if(getTicker(orders.info.orders[i].order_details.pair) != null)
-                    value += (orders.info.orders[i].order_details.amount * getTicker(orders.info.orders[i].order_details.pair).last);
+                BTCE.OrderListOrder order = orders.info.orders[i];
+                if(order != null && order.order_details.type.equals("buy") && order.order_details.pair.endsWith("usd"))
+                    value += (order.order_details.amount * order.order_details.rate);
             }
 
             return value;
@@ -83,10 +92,23 @@ public class AsyncBtcApi {
     }
 
     private double getValueIfNotNull(double amount, BTCE.Ticker ticker){
-        if(amount >= 0.01d && ticker != null)
+        if(amount >= 0.001d && ticker != null)
             return amount * ticker.last;
         else
             return 0d;
+    }
+
+    public double getOnOrder(String currency){
+        double value = 0d;
+        if(getOpenOrders() != null)
+        {
+            BTCE.OrderListOrder[] orders = getOpenOrders().info.orders;
+            for(int i = 0; i < orders.length; i++){
+                if(orders[i].order_details.pair.startsWith(currency) && orders[i].order_details.type.equals("sell"))
+                    value += orders[i].order_details.amount;
+            }
+        }
+        return value; //Todo: Für USD optimieren...
     }
 
     public double getTotalVolume() {
