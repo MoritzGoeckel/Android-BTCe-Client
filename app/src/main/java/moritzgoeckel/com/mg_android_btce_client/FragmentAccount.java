@@ -1,6 +1,8 @@
 package moritzgoeckel.com.mg_android_btce_client;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +21,7 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.inject(this, rootView);
 
@@ -52,7 +53,15 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
             }
         });
 
+        //Log.e("**MG**", "Account Fragment Created!");
+
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        activity.setTitle("Account");
     }
 
     private void renderAccountInfo(){

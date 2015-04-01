@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="250sp"
         android:layout_height="wrap_content">
 
         <TableRow
@@ -16,14 +15,15 @@
                 style="@style/bigger"
                 android:text="SELL"
                 android:id="@+id/order_item_buy_sell"
-                android:layout_width="150sp"/>
+                android:layout_width="90sp"/>
 
             <TextView
-                style="@style/bigger"
-                android:text="BTC_USD"
-                android:id="@+id/order_item_pair"
-                android:layout_width="wrap_content"
-                />
+                style="@style/small"
+                android:text="217.7 for 0.4"
+                android:layout_width="150sp"
+                android:id="@+id/order_item_conditions"
+                android:layout_column="1"/>
+
         </TableRow>
 
         <TableRow
@@ -32,17 +32,24 @@
 
             <TextView
                 style="@style/standart"
-                android:text="217.7 for 0.4"
-                android:layout_width="wrap_content"
-                android:id="@+id/order_item_conditions"/>
+                android:text="BTC_USD"
+                android:id="@+id/order_item_pair"
+                android:layout_column="0"/>
 
             <TextView
-                style="@style/standart"
-                android:layout_width="wrap_content"
-                android:text=""
+                style="@style/small"
+                android:text="State:"
                 android:id="@+id/order_item_status"/>
 
         </TableRow>
+
     </TableLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="50sp"
+        android:text="Cancel"
+        android:id="@+id/cancel_order_button"
+        style="@style/small"/>
 
 </LinearLayout>

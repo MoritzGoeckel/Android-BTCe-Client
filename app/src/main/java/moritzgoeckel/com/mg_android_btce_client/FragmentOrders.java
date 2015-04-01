@@ -1,5 +1,6 @@
 package moritzgoeckel.com.mg_android_btce_client;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -54,6 +55,12 @@ public class FragmentOrders extends ListFragment{
         return rootView;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        activity.setTitle("Orders");
+    }
+
     private void redraw() {
         BTCE.OrderList orders = GlobalData.API.getOpenOrders();
         if(orders != null)
@@ -73,13 +80,5 @@ public class FragmentOrders extends ListFragment{
         }
 
         return tmpList;
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        BTCE.OrderListOrder item = this.orderList.get(position);
-        Toast.makeText(getActivity(), item.order_details.rate + " Clicked!", Toast.LENGTH_SHORT).show();
     }
 }

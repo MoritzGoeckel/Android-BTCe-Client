@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import moritzgoeckel.com.mg_android_btce_client.Client.BTCE;
@@ -14,6 +15,7 @@ import moritzgoeckel.com.mg_android_btce_client.Client.GlobalData;
 import moritzgoeckel.com.mg_android_btce_client.R;
 
 public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
+    public static final int MaxEntries = 200;
     private final LayoutInflater mInflater;
 
     public HistoryListAdapter(Context context, List<BTCE.TradeHistoryOrder> data) {
@@ -26,8 +28,8 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
     public void setData(List<BTCE.TradeHistoryOrder> data) {
         clear();
         if (data != null) {
-            for (BTCE.TradeHistoryOrder appEntry : data) {
-                add(appEntry);
+            for (int i = 0; i < data.size() && i < MaxEntries; i++) {
+                add(data.get(i));
             }
         }
     }
@@ -55,10 +57,41 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
             duration = formatDuration(delta * 1000) + " AGO";
         }
 
-        ((TextView)view.findViewById(R.id.historic_order_item_buy_sell)).setText(item.trade_details.type);
-        ((TextView)view.findViewById(R.id.historic_order_item_conditions)).setText(item.trade_details.amount + " for " + item.trade_details.rate);
+        TextView sellBuyView = ((TextView)view.findViewById(R.id.historic_order_item_buy_sell));
+        sellBuyView.setText(item.trade_details.type);
+
+        if(item.trade_details.type.equals("buy"))
+            sellBuyView.setTextColor(getContext().getResources().getColor(R.color.buyColor));
+        else
+            sellBuyView.setTextColor(getContext().getResources().getColor(R.color.sellColor));
+
+        ((TextView)view.findViewById(R.id.historic_order_item_conditions)).setText(formatD(item.trade_details.amount) + " for " + formatD(item.trade_details.rate));
         ((TextView)view.findViewById(R.id.historic_order_item_pair)).setText(item.trade_details.pair);
         ((TextView)view.findViewById(R.id.historic_order_item_time)).setText(duration);
+
+        //Good trades with green background
+        int review = 0;
+        BTCE.Ticker ticker = GlobalData.API.getTicker(item.trade_details.pair);
+        if(ticker != null)
+        {
+            if(item.trade_details.type.equals("buy"))
+                if(item.trade_details.rate < ticker.last)
+                    review = 1;
+                else if(item.trade_details.rate > ticker.last)
+                    review = -1;
+
+            if(item.trade_details.type.equals("sell"))
+                if(item.trade_details.rate > ticker.last)
+                    review = 1;
+                else if(item.trade_details.rate < ticker.last)
+                    review = -1;
+        }
+
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.historic_order_layout);
+        if(review == 1)
+            layout.setBackgroundColor(getContext().getResources().getColor(R.color.goodColor));
+        if(review == -1)
+            layout.setBackgroundColor(getContext().getResources().getColor(R.color.badColor));
 
         return view;
     }
@@ -80,5 +113,10 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
         return(weeks + "W " + days +"D "+ hours + "H");
+    }
+
+    private String formatD(double d)
+    {
+        return String.valueOf((double)Math.round(d * 100) / 100);
     }
 }

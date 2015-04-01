@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         GlobalData.API = new AsyncBtcApi("121B9FF2-KZEAGDM9-DPO0PBAN-UVISX7YV-QJWRSAV1", "5a1446dca2af336dbffcf00e2ff290386960421fee7a152c71c16aaf290847f4", this);
+
         requestData();
     }
 
@@ -76,7 +77,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void setTitle(String newTitle) {
-        getActionBar().setTitle(newTitle);
+        getSupportActionBar().setTitle(newTitle);
     }
 
     @Override

@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:background="#ffffff"
+              android:id="@+id/historic_order_layout">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -16,14 +18,15 @@
                 style="@style/bigger"
                 android:text="SELL"
                 android:id="@+id/historic_order_item_buy_sell"
-                android:layout_width="150sp"/>
+                android:layout_width="170sp"/>
 
             <TextView
-                style="@style/bigger"
-                android:text="BTC_USD"
-                android:id="@+id/historic_order_item_pair"
+                style="@style/standart"
+                android:text="217.7 for 0.4"
                 android:layout_width="wrap_content"
-                />
+                android:id="@+id/historic_order_item_conditions"
+                android:layout_column="1"/>
+
         </TableRow>
 
         <TableRow
@@ -32,15 +35,23 @@
 
             <TextView
                 style="@style/standart"
-                android:text="217.7 for 0.4"
-                android:layout_width="wrap_content"
-                android:id="@+id/historic_order_item_conditions"/>
+                android:text="BTC_USD"
+                android:id="@+id/historic_order_item_pair"
+                android:layout_width="170sp"
+                android:layout_column="0"/>
 
             <TextView
                 style="@style/small"
                 android:layout_width="wrap_content"
                 android:text="0W 2D 11H AGO"
-                android:id="@+id/historic_order_item_time"/>
+                android:id="@+id/historic_order_item_time"
+                android:layout_column="1"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </TableRow>
     </TableLayout>

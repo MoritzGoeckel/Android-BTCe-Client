@@ -1,5 +1,6 @@
 package moritzgoeckel.com.mg_android_btce_client;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -53,6 +54,12 @@ public class FragmentHistory extends ListFragment{
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        activity.setTitle("History");
     }
 
     private void redraw() {
