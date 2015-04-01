@@ -38,17 +38,22 @@ public class FragmentOrders extends ListFragment{
 
             @Override
             public void onHistoryDataChanged(BTCE.TradeHistory history) {
-                redraw();
+
             }
 
             @Override
             public void onOpenOrdersDataChanged(BTCE.OrderList openOrders) {
-
+                redraw();
             }
 
             @Override
             public void onPairDataChanged(String pair, BTCE.Ticker ticker) {
 
+            }
+
+            @Override
+            public void onCancelOrderCompleted(int id) {
+                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
             }
         });
 

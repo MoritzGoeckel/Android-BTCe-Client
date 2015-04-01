@@ -48,6 +48,14 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
 
         BTCE.TradeHistoryOrder item = getItem(position);
 
+        initTextViews(view, item);
+
+        markGoodAndBadTrades(view, item);
+
+        return view;
+    }
+
+    private void initTextViews(View view, BTCE.TradeHistoryOrder item) {
         String duration = "";
 
         BTCE.Info info = GlobalData.API.getAccountInfo();
@@ -68,7 +76,9 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
         ((TextView)view.findViewById(R.id.historic_order_item_conditions)).setText(formatD(item.trade_details.amount) + " for " + formatD(item.trade_details.rate));
         ((TextView)view.findViewById(R.id.historic_order_item_pair)).setText(item.trade_details.pair);
         ((TextView)view.findViewById(R.id.historic_order_item_time)).setText(duration);
+    }
 
+    private void markGoodAndBadTrades(View view, BTCE.TradeHistoryOrder item) {
         //Good trades with green background
         int review = 0;
         BTCE.Ticker ticker = GlobalData.API.getTicker(item.trade_details.pair);
@@ -92,8 +102,6 @@ public class HistoryListAdapter extends ArrayAdapter<BTCE.TradeHistoryOrder> {
             layout.setBackgroundColor(getContext().getResources().getColor(R.color.goodColor));
         if(review == -1)
             layout.setBackgroundColor(getContext().getResources().getColor(R.color.badColor));
-
-        return view;
     }
 
     public static String formatDuration(long millis)

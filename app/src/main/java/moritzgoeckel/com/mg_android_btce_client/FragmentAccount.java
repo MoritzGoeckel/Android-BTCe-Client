@@ -51,6 +51,11 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
             public void onPairDataChanged(String pair, BTCE.Ticker ticker) {
                 renderAccountInfo();
             }
+
+            @Override
+            public void onCancelOrderCompleted(int id) {
+                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
+            }
         });
 
         //Log.e("**MG**", "Account Fragment Created!");

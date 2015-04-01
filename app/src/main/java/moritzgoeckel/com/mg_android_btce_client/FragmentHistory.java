@@ -49,7 +49,12 @@ public class FragmentHistory extends ListFragment{
 
             @Override
             public void onPairDataChanged(String pair, BTCE.Ticker ticker) {
+                redraw();
+            }
 
+            @Override
+            public void onCancelOrderCompleted(int id) {
+                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
             }
         });
 
@@ -68,7 +73,7 @@ public class FragmentHistory extends ListFragment{
         {
             historyOrdersList = arrayToList(history.info.trades);
 
-            adapter = new HistoryListAdapter(getActivity(), historyOrdersList);
+            adapter = new HistoryListAdapter(GlobalData.MainActivity, historyOrdersList);
             setListAdapter(adapter);
         }
     }

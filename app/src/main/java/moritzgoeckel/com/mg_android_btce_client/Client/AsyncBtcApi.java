@@ -136,10 +136,11 @@ public class AsyncBtcApi {
     }
 
     public interface BitcoinDataListener {
-        public void onAccountDataChanged(BTCE.Info info);
-        public void onHistoryDataChanged(BTCE.TradeHistory history);
-        public void onOpenOrdersDataChanged(BTCE.OrderList openOrders);
-        public void onPairDataChanged(String pair, BTCE.Ticker ticker);
+        void onAccountDataChanged(BTCE.Info info);
+        void onHistoryDataChanged(BTCE.TradeHistory history);
+        void onOpenOrdersDataChanged(BTCE.OrderList openOrders);
+        void onPairDataChanged(String pair, BTCE.Ticker ticker);
+        void onCancelOrderCompleted(int id);
     }
 
     private void notifyForAccountDataChange() {
@@ -198,123 +199,128 @@ public class AsyncBtcApi {
         mainHandler.post(myRunnable);
     }
 
-    private Thread accountDataRequestThread;
+    private void notifyForCancelOrderCompleted(final int id) {
+        //Magic to send a signal to the main thread
+        Handler mainHandler = new Handler(parentActivity.getBaseContext().getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run()
+            {
+                for (BitcoinDataListener listener : listeners)
+                    listener.onCancelOrderCompleted(id);
+            }
+        };
+        mainHandler.post(myRunnable);
+    }
+
     public void requestAccountData(){
-        accountDataRequestThread = new Thread(new Runnable() {
+        tryAsync(new MaxTryRunnable() {
             @Override
-            public void run() {
-
-                boolean success = false;
-                int tries = 0;
-                while (tries < MAXREQUESTTRIES && success == false) {
-                    try {
-                        Log.i("API DOWNLOAD", "Account Data");
-                        BTCE.Info tmp = api.getInfo();
-                        if (tmp.success == 1) {
-                            accountInfo = tmp;
-                            notifyForAccountDataChange();
-                            success = true;
-                        }
-                    } catch (Exception e) {
-                        Log.e("API DONWLOAD ERROR","requestAccountData: " + e.getMessage());
-                    }
-                    tries++;
+            public boolean run() throws Exception {
+                Log.i("API DOWNLOAD", "Account Data");
+                BTCE.Info tmp = api.getInfo();
+                if (tmp.success == 1) {
+                    accountInfo = tmp;
+                    notifyForAccountDataChange();
+                    return true;
                 }
+                return false;
             }
-        });
-
-        accountDataRequestThread.start();
+        }, MAXREQUESTTRIES);
     }
 
-    private Thread openOrdersRequestThread;
     public void requestOpenOrdersData(){
-        openOrdersRequestThread = new Thread(new Runnable() {
+        tryAsync(new MaxTryRunnable() {
             @Override
-            public void run() {
-
-                boolean success = false;
-                int tries = 0;
-                while (tries < MAXREQUESTTRIES && success == false)
-                {
-                    try {
-                        Log.i("API DOWNLOAD", "Open Orders");
-                        BTCE.OrderList tmp = api.getActiveOrders();
-                        if (tmp.success == 1) {
-                            openOrders = tmp;
-                            notifyForOpenOrdersDataChange();
-                            success = true;
-                        }
-                    } catch (Exception e) {
-                        Log.e("API DONWLOAD ERROR", "requestOpenOrdersData: " + e.getMessage());
-
-                    }
-                    tries++;
+            public boolean run() throws Exception {
+                Log.i("API DOWNLOAD", "Open Orders");
+                BTCE.OrderList tmp = api.getActiveOrders();
+                if (tmp.success == 1) {
+                    openOrders = tmp;
+                    notifyForOpenOrdersDataChange();
+                    return true;
                 }
+                return false;
             }
-        });
-
-        openOrdersRequestThread.start();
+        }, MAXREQUESTTRIES);
     }
 
-    private Thread historyDataRequestThread;
     public void requestHistoryData(){
-        historyDataRequestThread = new Thread(new Runnable() {
+        tryAsync(new MaxTryRunnable() {
             @Override
-            public void run() {
-                boolean success = false;
-                int tries = 0;
-                while (tries < MAXREQUESTTRIES && success == false) {
-                    try {
-                        Log.i("API DOWNLOAD", "History Data");
-                        BTCE.TradeHistory tmp = api.getTradeHistory();
-                        if (tmp.success == 1) {
-                            tradeHistory = tmp;
-                            notifyForHistoryDataChange();
-                            success = true;
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("API DONWLOAD ERROR", "requestHistoryData: " + e.getMessage());
-
-                    }
-                    tries++;
+            public boolean run() throws Exception {
+                Log.i("API DOWNLOAD", "History Data");
+                BTCE.TradeHistory tmp = api.getTradeHistory();
+                if (tmp.success == 1) {
+                    tradeHistory = tmp;
+                    notifyForHistoryDataChange();
+                    return true;
                 }
+                return false;
             }
-        });
-
-        historyDataRequestThread.start();
+        }, MAXREQUESTTRIES);
     }
 
-    private Thread pairDataRequestThread;
     public void requestPairData(final String pair){
-        pairDataRequestThread = new Thread(new Runnable() {
+        tryAsync(new MaxTryRunnable() {
+            @Override
+            public boolean run() throws Exception {
+                Log.i("API DOWNLOAD", "Pair Data");
+
+                BTCE.Ticker ticker = api.getTicker(pair);
+
+                if (pairTicker.containsKey(pair)) {
+                    pairTicker.remove(pair);
+                }
+
+                pairTicker.put(pair, ticker);
+                notifyForPairDataChange(pair);
+                return true;
+            }
+        }, MAXREQUESTTRIES);
+    }
+
+    public void requestCancelOrder(final int id){
+        tryAsync(new MaxTryRunnable() {
+            @Override
+            public boolean run() throws Exception {
+                Log.i("API DOWNLOAD", "Cancel Data");
+
+                BTCE.CancelOrder cancelResponse = api.cancelOrder(id);
+
+                if (cancelResponse.success == 1) {
+                    notifyForCancelOrderCompleted(id);
+                    requestOpenOrdersData();
+                    return true;
+                }
+                return false;
+            }
+        }, MAXREQUESTTRIES);
+    }
+
+    interface MaxTryRunnable{
+        boolean run() throws Exception;
+    }
+
+    public void tryAsync(final MaxTryRunnable runnable, final int maxTries){
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean success = false;
                 int tries = 0;
-                while (tries < MAXREQUESTTRIES && success == false) {
-                    try {
-                        Log.i("API DOWNLOAD", "Pair Data");
-
-                        BTCE.Ticker ticker = api.getTicker(pair);
-
-                        if (pairTicker.containsKey(pair)) {
-                            pairTicker.remove(pair);
-                        }
-
-                        pairTicker.put(pair, ticker);
-                        notifyForPairDataChange(pair);
-                        success = true;
-
-                    } catch (Exception e) {
-                        Log.e("API DONWLOAD ERROR", "requestPairData: " + e.getMessage());
+                boolean success = false;
+                while (tries < maxTries && success == false){
+                    try{
+                        tries++;
+                        success = runnable.run();
                     }
-                    tries++;
+                    catch (Exception e)
+                    {
+                        success = false;
+                    }
                 }
             }
         });
-
-        pairDataRequestThread.start();
+        thread.start();
     }
 
 }

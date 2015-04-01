@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import moritzgoeckel.com.mg_android_btce_client.Client.BTCE;
+import moritzgoeckel.com.mg_android_btce_client.Client.GlobalData;
 import moritzgoeckel.com.mg_android_btce_client.R;
 
 public class OrdersListAdapter extends ArrayAdapter<BTCE.OrderListOrder> {
@@ -50,6 +51,13 @@ public class OrdersListAdapter extends ArrayAdapter<BTCE.OrderListOrder> {
 
         final BTCE.OrderListOrder item = getItem(position);
 
+        initTextViews(view, item);
+        initCancelBtnListener(view, item);
+
+        return view;
+    }
+
+    private void initTextViews(View view, BTCE.OrderListOrder item) {
         TextView sellBuyView = ((TextView)view.findViewById(R.id.order_item_buy_sell));
         sellBuyView.setText(item.order_details.type);
 
@@ -61,23 +69,24 @@ public class OrdersListAdapter extends ArrayAdapter<BTCE.OrderListOrder> {
         ((TextView)view.findViewById(R.id.order_item_conditions)).setText(formatD(item.order_details.amount) +  " for " + formatD(item.order_details.rate));
         ((TextView)view.findViewById(R.id.order_item_pair)).setText(item.order_details.pair);
         ((TextView)view.findViewById(R.id.order_item_status)).setText("State: " + item.order_details.status);
+    }
 
+    private void initCancelBtnListener(View view, final BTCE.OrderListOrder item) {
         Button cancelOrderBtn = (Button) view.findViewById(R.id.cancel_order_button);
         cancelOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 // Add the buttons
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //Toast.makeText(getContext(), item.order_details.rate + " " + item.order_details.pair + " -> Cancel", Toast.LENGTH_SHORT).show();
-                        //Todo: Cancel
+                        Toast.makeText(getContext(), "Canceling order...", Toast.LENGTH_SHORT).show();
+                        GlobalData.API.requestCancelOrder((int)item.order_id); //Long or int?
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getContext(), "Did not cancel.", Toast.LENGTH_SHORT).show();
+                        //Canceled canceling :D
                     }
                 });
                 builder.setTitle("Cancel order?");
@@ -86,8 +95,6 @@ public class OrdersListAdapter extends ArrayAdapter<BTCE.OrderListOrder> {
                 dialog.show();
             }
         });
-
-        return view;
     }
 
     private String formatD(double d)
