@@ -29,6 +29,13 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:id="@+id/pair_avg"/>
+
+            <TextView
+                style="@style/standart"
+                android:text="BTC"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/pair_one_funds"/>
         </TableRow>
 
         <TableRow
@@ -39,7 +46,7 @@
             <TextView
                 style="@style/standart"
                 android:text="High"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:id="@+id/pair_heigh"
                 android:layout_marginLeft="8dp"
                 android:paddingLeft="0dp"/>
@@ -47,8 +54,15 @@
             <TextView
                 style="@style/standart"
                 android:text="Low"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:id="@+id/pair_low"/>
+
+            <TextView
+                style="@style/standart"
+                android:text="USD"
+                android:layout_width="wrap_content"
+                android:id="@+id/pair_two_funds"
+                android:layout_height="wrap_content"/>
 
         </TableRow>
 
@@ -128,12 +142,13 @@
         </TableLayout>
 
         <Button
-            android:layout_width="80dp"
+            android:layout_width="fill_parent"
             android:layout_height="65dp"
             android:text="Buy"
             android:id="@+id/pair_buy_btn"
             android:layout_marginLeft="8dp"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:layout_marginRight="4dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -205,12 +220,27 @@
         </TableLayout>
 
         <Button
-            android:layout_width="80dp"
+            android:layout_width="fill_parent"
             android:layout_height="65dp"
             android:text="Sell"
             android:id="@+id/pair_sell_btn"
             android:layout_marginLeft="8dp"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:layout_marginRight="4dp"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open"
+        style="@style/bigger"
+        android:layout_column="0"
+        android:layout_marginTop="16dp"/>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pair_open_orders_list"
+        android:layout_gravity="left"/>
 
 </LinearLayout>

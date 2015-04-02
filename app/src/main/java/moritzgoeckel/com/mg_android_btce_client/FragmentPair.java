@@ -9,15 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import moritzgoeckel.com.mg_android_btce_client.Client.AsyncBtcApi;
 import moritzgoeckel.com.mg_android_btce_client.Client.BTCE;
 import moritzgoeckel.com.mg_android_btce_client.Client.GlobalData;
+import moritzgoeckel.com.mg_android_btce_client.Data.OrdersListAdapter;
 
 public class FragmentPair extends android.support.v4.app.Fragment{
 
@@ -66,6 +71,17 @@ public class FragmentPair extends android.support.v4.app.Fragment{
     @InjectView(R.id.pair_sell_btn)
     Button pair_sell_btn;
 
+
+    @InjectView(R.id.pair_open_orders_list)
+    ListView pair_open_orders_list;
+
+
+    @InjectView(R.id.pair_one_funds)
+    TextView pair_one_funds;
+
+    @InjectView(R.id.pair_two_funds)
+    TextView pair_two_funds;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,6 +93,7 @@ public class FragmentPair extends android.support.v4.app.Fragment{
         //webView.loadUrl("https://bitcoincharts.com/charts/chart.png?m=btceUSD&v=1&t=S&noheader=1&height=80&width=750&r=2"); //Todo: allgemein / woher die Charts bei den alts?
 
         render();
+        renderAccountInfo();
 
         initButtonListeners();
 
@@ -87,7 +104,9 @@ public class FragmentPair extends android.support.v4.app.Fragment{
         GlobalData.API.addListener(new AsyncBtcApi.BitcoinDataListener() {
             @Override
             public void onAccountDataChanged(BTCE.Info info) {
-
+                render();
+                renderOpenOrderList();
+                renderAccountInfo();
             }
 
             @Override
@@ -97,7 +116,7 @@ public class FragmentPair extends android.support.v4.app.Fragment{
 
             @Override
             public void onOpenOrdersDataChanged(BTCE.OrderList openOrders) {
-
+                renderOpenOrderList();
             }
 
             @Override
@@ -107,11 +126,35 @@ public class FragmentPair extends android.support.v4.app.Fragment{
 
             @Override
             public void onCancelOrderCompleted(int id) {
-
+                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
             }
         });
 
+        renderOpenOrderList();
+
         return rootView;
+    }
+
+    private void renderOpenOrderList() {
+
+        //Todo: Filter
+
+        BTCE.OrderList o = GlobalData.API.getOpenOrders();
+        if(o != null){
+            List<BTCE.OrderListOrder> orderList = arrayToListAndFilter(o.info.orders);
+            pair_open_orders_list.setAdapter(new OrdersListAdapter(getActivity(), orderList));
+        }
+    }
+
+    private List<BTCE.OrderListOrder> arrayToListAndFilter(BTCE.OrderListOrder[] array){
+        List<BTCE.OrderListOrder> tmpList = new ArrayList<>();
+
+        for(int i = 0; i < array.length; i++){
+            if(array[i].order_details.pair.contains("btc"))
+                tmpList.add(array[i]);
+        }
+
+        return tmpList;
     }
 
     private void initSellSeekbars() {
@@ -120,7 +163,7 @@ public class FragmentPair extends android.support.v4.app.Fragment{
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 BTCE.Ticker ticker = GlobalData.API.getTicker("btc_usd");
                 if(ticker != null) {
-                    double min = ticker.last;
+                    double min = ticker.sell;
                     double max = ticker.high;
 
                     double price = ((max - min) * (progress / 100d)) + min;
@@ -171,13 +214,15 @@ public class FragmentPair extends android.support.v4.app.Fragment{
     }
 
     private void initBuySeekbars() {
+        pair_buy_price_seekBar.setProgress(pair_buy_amount_seekBar.getMax());
+
         pair_buy_price_seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 BTCE.Ticker ticker = GlobalData.API.getTicker("btc_usd");
                 if (ticker != null) {
                     double min = ticker.low;
-                    double max = ticker.high;
+                    double max = ticker.buy;
 
                     double price = ((max - min) * (progress / 100d)) + min;
 
@@ -277,6 +322,14 @@ public class FragmentPair extends android.support.v4.app.Fragment{
                 dialog.show();
             }
         });
+    }
+
+    public void renderAccountInfo(){
+        BTCE.Info info = GlobalData.API.getAccountInfo();
+        if(info != null) {
+            pair_one_funds.setText("BTC: " + formatD(info.info.funds.btc) + "  ");
+            pair_two_funds.setText("USD: " + formatD(info.info.funds.usd) + "  ");
+        }
     }
 
     public void render(){
