@@ -72,7 +72,7 @@ public class FragmentOrders extends ListFragment{
         {
             orderList = arrayToList(orders.info.orders);
 
-            adapter = new OrdersListAdapter(getActivity(), orderList);
+            adapter = new OrdersListAdapter(GlobalData.MainActivity, orderList);
             setListAdapter(adapter);
         }
     }

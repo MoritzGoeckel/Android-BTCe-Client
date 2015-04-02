@@ -1,7 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:weightSum="1">
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/standart"
+                android:text="Last"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/pair_last"
+                android:layout_marginLeft="8dp"
+                android:paddingLeft="0dp"/>
+
+            <TextView
+                style="@style/standart"
+                android:text="Avg"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/pair_avg"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                style="@style/standart"
+                android:text="High"
+                android:layout_width="100dp"
+                android:id="@+id/pair_heigh"
+                android:layout_marginLeft="8dp"
+                android:paddingLeft="0dp"/>
+
+            <TextView
+                style="@style/standart"
+                android:text="Low"
+                android:layout_width="100dp"
+                android:id="@+id/pair_low"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy"
+                    style="@style/bigger"
+                    android:id="@+id/textView"
+                    android:layout_marginLeft="0dp"
+                    android:paddingLeft="0dp"/>
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    style="@style/standart"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:text=""
+                    android:hint="Price"
+                    android:id="@+id/pair_buy_price"
+                    android:paddingLeft="0dp"/>
+
+                <EditText
+                    style="@style/standart"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:text=""
+                    android:hint="Amount"
+                    android:id="@+id/pair_buy_amount"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <SeekBar
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pair_buy_price_seekBar"
+                    android:max="100"
+                    />
+
+                <SeekBar
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pair_buy_amount_seekBar"
+                    android:max="100"/>
+            </TableRow>
+
+        </TableLayout>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="65dp"
+            android:text="Buy"
+            android:id="@+id/pair_buy_btn"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="bottom"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/bigger"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sell"
+                    android:layout_marginLeft="0dp"
+                    android:paddingLeft="0dp"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    style="@style/standart"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:text=""
+                    android:hint="Price"
+                    android:id="@+id/pair_sell_price"
+                    android:paddingLeft="0dp"/>
+
+                <EditText
+                    style="@style/standart"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:text=""
+                    android:hint="Amount"
+                    android:id="@+id/pair_sell_amount"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <SeekBar
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pair_sell_price_seekBar"
+                    android:max="100"/>
+
+                <SeekBar
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pair_sell_amount_seekBar"
+                    android:max="100"/>
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="65dp"
+            android:text="Sell"
+            android:id="@+id/pair_sell_btn"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="bottom"/>
+    </LinearLayout>
 
 </LinearLayout>

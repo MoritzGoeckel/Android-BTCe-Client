@@ -50,6 +50,6 @@
         android:layout_height="50sp"
         android:text="Cancel"
         android:id="@+id/cancel_order_button"
-        style="@style/small"/>
+        />
 
 </LinearLayout>
