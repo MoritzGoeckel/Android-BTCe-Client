@@ -90,7 +90,9 @@ public class FragmentPair extends android.support.v4.app.Fragment{
         ButterKnife.inject(this, rootView);
 
         //Init chart? Todo:Chart?
-        //webView.loadUrl("https://bitcoincharts.com/charts/chart.png?m=btceUSD&v=1&t=S&noheader=1&height=80&width=750&r=2"); //Todo: allgemein / woher die Charts bei den alts?
+        //webView.loadUrl("https://bitcoincharts.com/charts/chart.png?m=btceUSD&v=1&t=S&noheader=1&height=80&width=750&r=2");
+
+        //Todo: allgemein implementieren
 
         render();
         renderAccountInfo();

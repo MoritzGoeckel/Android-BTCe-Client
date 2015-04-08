@@ -19,6 +19,7 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
     @InjectView(R.id.account_volume) TextView tx_volume;
     @InjectView(R.id.account_funds) TextView tx_funds;
 
+    //Todo: Möglichkeit zur Eingabe der Keys
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
