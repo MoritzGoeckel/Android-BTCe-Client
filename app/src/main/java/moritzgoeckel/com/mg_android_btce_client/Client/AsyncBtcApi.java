@@ -141,6 +141,7 @@ public class AsyncBtcApi {
         void onOpenOrdersDataChanged(BTCE.OrderList openOrders);
         void onPairDataChanged(String pair, BTCE.Ticker ticker);
         void onCancelOrderCompleted(int id);
+        void onTradeOrderCompleted(BTCE.Trade trade);
     }
 
     private void notifyForAccountDataChange() {
@@ -208,6 +209,20 @@ public class AsyncBtcApi {
             {
                 for (BitcoinDataListener listener : listeners)
                     listener.onCancelOrderCompleted(id);
+            }
+        };
+        mainHandler.post(myRunnable);
+    }
+
+    private void notifyForTradeOrderCompleted(final BTCE.Trade trade) {
+        //Magic to send a signal to the main thread
+        Handler mainHandler = new Handler(parentActivity.getBaseContext().getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run()
+            {
+                for (BitcoinDataListener listener : listeners)
+                    listener.onTradeOrderCompleted(trade);
             }
         };
         mainHandler.post(myRunnable);
@@ -291,6 +306,26 @@ public class AsyncBtcApi {
                 if (cancelResponse.success == 1) {
                     notifyForCancelOrderCompleted(id);
                     requestOpenOrdersData();
+                    return true;
+                }
+                return false;
+            }
+        }, MAXREQUESTTRIES);
+    }
+
+    public void requestTradeOrder(final String pair, final String type, final double rate, final double amount){
+        tryAsync(new MaxTryRunnable() {
+            @Override
+            public boolean run() throws Exception {
+                Log.i("API DOWNLOAD", "Cancel Data");
+
+                BTCE.Trade trade = api.trade(pair, type, rate, amount);
+
+                if (trade.success == 1) {
+                    notifyForTradeOrderCompleted(trade);
+                    requestOpenOrdersData();
+                    requestHistoryData();
+                    requestAccountData();
                     return true;
                 }
                 return false;

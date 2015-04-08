@@ -126,7 +126,12 @@ public class FragmentPair extends android.support.v4.app.Fragment{
 
             @Override
             public void onCancelOrderCompleted(int id) {
-                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
+
+            }
+
+            @Override
+            public void onTradeOrderCompleted(BTCE.Trade trade) {
+
             }
         });
 
@@ -136,9 +141,6 @@ public class FragmentPair extends android.support.v4.app.Fragment{
     }
 
     private void renderOpenOrderList() {
-
-        //Todo: Filter
-
         BTCE.OrderList o = GlobalData.API.getOpenOrders();
         if(o != null){
             List<BTCE.OrderListOrder> orderList = arrayToListAndFilter(o.info.orders);
@@ -245,9 +247,8 @@ public class FragmentPair extends android.support.v4.app.Fragment{
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 BTCE.Info account = GlobalData.API.getAccountInfo();
-                if(account != null && pair_buy_price.getText() != null) {
-                    try
-                    {
+                if (account != null && pair_buy_price.getText() != null) {
+                    try {
                         double price = Double.valueOf(pair_buy_price.getText().toString());
 
                         double min = 0d;
@@ -256,9 +257,7 @@ public class FragmentPair extends android.support.v4.app.Fragment{
                         double amount = ((max - min) * (progress / 100d)) + min;
 
                         pair_buy_amount.setText(formatD(amount));
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
 
                     }
                 }
@@ -280,46 +279,62 @@ public class FragmentPair extends android.support.v4.app.Fragment{
         pair_buy_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                // Add the buttons
-                builder.setPositiveButton("Buy!", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(), "Submitting buy order ...", Toast.LENGTH_LONG).show();
-                        //Todo: do the buy
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Cancel
-                    }
-                });
-                builder.setTitle("Buy?");
-                builder.setMessage("Buy at " + pair_buy_price.getText().toString() + " USD " + pair_buy_amount.getText().toString() + " BTC");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                try {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    final double rate = Double.valueOf(pair_buy_price.getText().toString());
+                    final double amount = Double.valueOf(pair_buy_amount.getText().toString());
+
+                    builder.setTitle("Buy?");
+                    builder.setMessage("Buy at " + rate + " USD " + amount + " BTC");
+
+                    // Add the buttons
+                    builder.setPositiveButton("Buy!", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Toast.makeText(getActivity(), "Submitting buy order ...", Toast.LENGTH_LONG).show();
+                            GlobalData.API.requestTradeOrder("btc_usd", "buy", rate, amount);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Cancel
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }catch (Exception e){}
             }
         });
 
         pair_sell_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                // Add the buttons
-                builder.setPositiveButton("Sell!", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(), "Submitting sell order ...", Toast.LENGTH_LONG).show();
-                        //Todo: do the sell
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Cancel
-                    }
-                });
-                builder.setTitle("Sell?");
-                builder.setMessage("Sell " + pair_buy_amount.getText().toString() + " BTC at " + pair_buy_price.getText().toString() + " USD");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                try {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    final double rate = Double.valueOf(pair_sell_price.getText().toString());
+                    final double amount = Double.valueOf(pair_sell_amount.getText().toString());
+
+                    builder.setTitle("Sell?");
+                    builder.setMessage("Sell " + amount + " BTC at " + rate + " USD");
+
+                    // Add the buttons
+                    builder.setPositiveButton("Sell!", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Toast.makeText(getActivity(), "Submitting sell order ...", Toast.LENGTH_LONG).show();
+                            GlobalData.API.requestTradeOrder("btc_usd", "sell", rate, amount);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Cancel
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }catch (Exception e){}
             }
         });
     }

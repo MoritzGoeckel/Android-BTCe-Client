@@ -54,7 +54,12 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
 
             @Override
             public void onCancelOrderCompleted(int id) {
-                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
+
+            }
+
+            @Override
+            public void onTradeOrderCompleted(BTCE.Trade trade) {
+
             }
         });
 
@@ -70,6 +75,8 @@ public class FragmentAccount extends android.support.v4.app.Fragment{
     }
 
     private void renderAccountInfo(){
+
+        //Todo: Redesign account page
 
         BTCE.Info info = GlobalData.API.getAccountInfo();
         if(info != null)

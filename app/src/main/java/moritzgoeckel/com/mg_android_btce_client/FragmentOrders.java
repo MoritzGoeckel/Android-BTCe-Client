@@ -53,7 +53,12 @@ public class FragmentOrders extends ListFragment{
 
             @Override
             public void onCancelOrderCompleted(int id) {
-                GlobalData.notifiyUserForCancelOrderCompleted(getActivity());
+
+            }
+
+            @Override
+            public void onTradeOrderCompleted(BTCE.Trade trade) {
+
             }
         });
 
